@@ -47,9 +47,10 @@ class WebRTCOfferBuilder(WebRTCStreamBuilder):
 
 
 class WebRTCAnswerBuilder(WebRTCStreamBuilder):
-  def __init__(self, offer_sdp: str, bind_address: Optional[str] = None):
+  def __init__(self, offer_sdp: str, bind_address: Optional[str] = None, local_only: bool = False):
     self.offer_sdp = offer_sdp
     self.bind_address = bind_address
+    self.local_only = local_only
     self.video_tracks: Dict[str, TiciVideoStreamTrack] = {}
     self.requested_audio = False
     self.audio_tracks: List[object] = []
@@ -78,4 +79,5 @@ class WebRTCAnswerBuilder(WebRTCStreamBuilder):
       audio_producer_tracks=self.audio_tracks,
       should_add_data_channel=False,
       bind_address=self.bind_address,
+      local_only=self.local_only,
     )
