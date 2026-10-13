@@ -54,12 +54,13 @@ class WebRTCBaseStream(abc.ABC):
                video_producer_tracks: List[TiciVideoStreamTrack],
                audio_producer_tracks: List[Any],
                should_add_data_channel: bool,
-               bind_address: Optional[str] = None):
+               bind_address: Optional[str] = None,
+               local_only: bool = False):
     config = Configuration()
     config.force_media_transport = True
     config.disable_auto_negotiation = True
-    config.ice_servers = [IceServer("stun:stun.l.google.com:19302")]
-    # the peers negotiate the smaller of their limits, so this only raises it when both sides allow it
+    config.ice_servers = [] if local_only else [IceServer("stun:stun.l.google.com:19302")]
+    # The peers negotiate the smaller limit.
     config.max_message_size = 16 * 1024 * 1024
     if bind_address is not None:
       config.bind_address = bind_address
